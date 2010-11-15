@@ -47,9 +47,7 @@ class YellowPagesDetails(Resource):
             res['thumb_urls'] = []
             try:
                 disp_ads = dc['products']['dispAd']
-                print 'disp_ad : %s' % disp_ads
                 for ad in disp_ads:
-                    print 'ad : %s' % ad
                     res['thumb_urls'].append(ad['thmbUrl'])
 
             except KeyError:
@@ -76,23 +74,22 @@ class YellowPagesList(Resource):
         try:
             q = cgi.escape(request.args['q'][0],None)
             location = cgi.escape(request.args['location'][0],None)
+            key = '%s%s' % (q,location)
+
+
             callback = cgi.escape(request.args['callback'][0],None)
             try:
-                results = cached_results[q]
-                print 'returning cached results'
-                return '%s(%s)' % (callback, cached_results[q])
+                results = cached_results[key]
+                return '%s(%s)' % (callback, cached_results[key])
             except KeyError:
                 try:
-                    print 'getting from yellowpages'
                     results = yp.find_business(q, location, uid='416.441.3594', page_len=100)
                     content = json.loads(results)
-                    listings = content['listings'][0:5]
-                    
+                    listings = content['listings']
                     details_list = []
 
 
                     for l in listings:
-                        print 'listing : %s' % l
                         d = {}
                         try:
                             d['encoded_business_name'] = YellowAPI.encode_business_name(l['name'])
@@ -113,8 +110,9 @@ class YellowPagesList(Resource):
                         except TypeError:
                             pass
 
+
                     results = json.dumps({'status': 'ok','results':details_list})
-                    cached_results[q] = results
+                    cached_results[key] = results
                     return '%s(%s)' % (callback, results)
                 except urllib2.URLError:
                     return '%s(%s)' % (callback, json.dumps({'status':'failed','reason':'Could not pull data from yellow pages.'}))

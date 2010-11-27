@@ -16,6 +16,13 @@ yp = YellowAPI(API_KEY, True, format='JSON')
 
 cached_results = {}
 
+import twillio
+
+class CallMyself(Resource):
+    def render_GET(self, request):
+        twillio.main()
+        return 'yeehaw'
+
 class YellowPagesDetails(Resource):
     def render_GET(self, request):
         try:
@@ -124,6 +131,7 @@ class YellowPagesList(Resource):
 root = Resource()
 root.putChild('find_business', YellowPagesList())
 root.putChild('get_business_details', YellowPagesDetails())
+root.putChild('call_myself', CallMyself())
 factory = Site(root)
 reactor.listenTCP(8083, factory)
 print 'running...'

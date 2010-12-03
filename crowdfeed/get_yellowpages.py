@@ -32,6 +32,12 @@ class Activate(Resource):
         state.count+=1
         return 'yeehaw %s' % state.count
 
+class DeActivate(Resource):
+    def render_GET(self,request):
+        state.count=0
+        return 'yeehaw %s' % state.count
+
+
 class CallMyself(Resource):
     def render_GET(self, request):
         twillio.main()
@@ -148,6 +154,7 @@ root.putChild('get_business_details', YellowPagesDetails())
 root.putChild('call_myself', CallMyself())
 root.putChild('pager', Pager())
 root.putChild('activate', Activate())
+root.putChild('deactivate', DeActivate())
 
 factory = Site(root)
 reactor.listenTCP(8083, factory)

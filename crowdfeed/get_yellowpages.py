@@ -19,13 +19,64 @@ cached_results = {}
 import twillio
 import state
 
+class DadOnline(Resource):
+    def __init__(self):
+        state.dad_online = "offline"
+
+    def render_GET(self, request):
+        return state.dad_online
+
+    def render_POST(self, request):
+        status = cgi.escape(request.args['status'][0], None)
+        if status:
+            state.dad_online = status
+            return 'ok'
+        else:
+            return 'message not specified'
+
+
+class AliceCommand(Resource):
+    def __init__(self):
+        state.alice_message_creator = ""
+
+    def render_GET(self, request):
+        message = state.alice_message_creator
+        state.alice_message_creator = ""
+        return message
+
+    def render_POST(self, request):
+        message = cgi.escape(request.args['message'][0],None)
+        if message:
+            state.alice_message_creator = message
+            return 'ok'
+        else:
+            return 'message not specified'
+
+
+class AliceResult(Resource):
+
+    def __init__(self):
+        state.alice_message_guest = ""
+
+    def render_GET(self, request):
+        message = state.alice_message_guest
+        state.alice_message_guest = ""
+        return message
+
+    def render_POST(self, request):
+        message = cgi.escape(request.args['message'][0],None)
+        if message:
+            state.alice_message_guest = message
+            return 'ok'
+        else:
+            return 'message not specified'
 
 class Pager(Resource):
     def render_GET(self, request):
         if state.count:
-            return '<object width="640" height="385"><param name="movie" value="http://www.youtube.com/v/IQRWeZy-S8Q?fs=1&amp;hl=en_US"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/IQRWeZy-S8Q?fs=1&amp;hl=en_US" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="640" height="385"></embed></object>'
+            return '1'
         else:
-            return 'some other none related ad'
+            return '0'
 
 class Activate(Resource):
     def render_GET(self,request):
@@ -148,6 +199,9 @@ class YellowPagesList(Resource):
             return json.dumps({'status':'failed','reason':'No q term specified.'})
 
 
+
+
+
 root = Resource()
 root.putChild('find_business', YellowPagesList())
 root.putChild('get_business_details', YellowPagesDetails())
@@ -155,6 +209,10 @@ root.putChild('call_myself', CallMyself())
 root.putChild('pager', Pager())
 root.putChild('activate', Activate())
 root.putChild('deactivate', DeActivate())
+root.putChild('alice_command', AliceCommand())
+root.putChild('alice_result', AliceResult())
+root.putChild('dad_online', DadOnline())
+
 
 factory = Site(root)
 reactor.listenTCP(8083, factory)

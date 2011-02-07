@@ -25,7 +25,7 @@ class DadOnline(Resource):
         state.dad_online = "offline"
 
     def render_GET(self, request):
-        do = status.dad_online
+        do = state.dad_online
         state.dad_online = "offline"
         return do
 

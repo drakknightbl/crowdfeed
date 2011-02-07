@@ -19,11 +19,13 @@ cached_results = {}
 import twillio
 import state
 
+
 class DadOnline(Resource):
     def __init__(self):
         state.dad_online = "offline"
 
     def render_GET(self, request):
+        state.dad_online = "offline"
         return state.dad_online
 
     def render_POST(self, request):
@@ -197,6 +199,8 @@ class YellowPagesList(Resource):
 
         except KeyError:
             return json.dumps({'status':'failed','reason':'No q term specified.'})
+
+
 
 
 

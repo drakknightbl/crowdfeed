@@ -25,8 +25,9 @@ class DadOnline(Resource):
         state.dad_online = "offline"
 
     def render_GET(self, request):
+        do = status.dad_online
         state.dad_online = "offline"
-        return state.dad_online
+        return do
 
     def render_POST(self, request):
         status = cgi.escape(request.args['status'][0], None)

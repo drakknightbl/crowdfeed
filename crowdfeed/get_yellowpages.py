@@ -19,6 +19,23 @@ cached_results = {}
 import twillio
 import state
 
+class GameInvite(Resource):
+    def __init__(self):
+        state.friend_name = ""
+
+    def render_GET(self, request):
+        fn = state.friend_name
+        state.friend_name = ""
+        return fn
+
+    def render_POST(self, request):
+        friend_name = cgi.escape(request.args['friend_name'][0], None)
+        if friend_name:
+            state.friend_name = friend_name
+            return 'ok'
+        else:
+            return "friend_name not specified"
+
 
 class DadOnline(Resource):
     def __init__(self):
@@ -217,6 +234,7 @@ root.putChild('deactivate', DeActivate())
 root.putChild('alice_command', AliceCommand())
 root.putChild('alice_result', AliceResult())
 root.putChild('dad_online', DadOnline())
+root.putChild('game_invite', GameInvite())
 
 
 factory = Site(root)

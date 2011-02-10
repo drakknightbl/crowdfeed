@@ -26,6 +26,7 @@ class GameInvite(Resource):
     def render_GET(self, request):
         fn = state.friend_name
         state.friend_name = ""
+        print 'fn : %s' % fn
         return fn
 
     def render_POST(self, request):

@@ -28,3 +28,7 @@ It is also being used by the mwc, christmas party and video concierge demos.
 Requirements :
     * python
     * twisted 
+
+Using :
+    ~:python get_yellowpages.py
+    ~:python get_upload.py

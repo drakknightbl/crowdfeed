@@ -44,6 +44,7 @@ class DadOnline(Resource):
     def render_GET(self, request):
         do = state.dad_online
         state.dad_online = "offline"
+        print 'state : %s' % do
         return do
 
     def render_POST(self, request):

@@ -30,5 +30,5 @@ Requirements :
     * twisted 
 
 Using :
-    ~:python get_yellowpages.py
+    ~:python get_crowdfeed.py
     ~:python get_upload.py

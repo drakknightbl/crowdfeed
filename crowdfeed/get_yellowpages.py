@@ -7,7 +7,7 @@ from twisted.internet import reactor
 
 
 import simplejson as json
-import urllib2
+import urllib2, datetime
 
 API_KEY = 'x4ss4ypqaewteeqpkxzhr6xw' 
 from yellowapi import YellowAPI
@@ -26,6 +26,8 @@ class GameInvite(Resource):
     def render_GET(self, request):
         fn = state.friend_name
         state.friend_name = ""
+        print 'game state : %s at : %s' % (fn, datetime.datetime.now())
+
         return fn
 
     def render_POST(self, request):
@@ -44,7 +46,7 @@ class DadOnline(Resource):
     def render_GET(self, request):
         do = state.dad_online
         state.dad_online = "offline"
-        print 'state : %s' % do
+        print 'dad state : %s at : %s' % (do, datetime.datetime.now())
         return do
 
     def render_POST(self, request):

@@ -1,9 +1,5 @@
 CROWDFEED
 ---------
-This is going to be really cool but for now I'm just using 
-
-
-
 This is a utility web application used for various projects to solve usually quick and small problems where a web server is required.
 
 It was initially created to act as a proxy to grab data from the yellowpages api so that I can cache results in memory and not have to worry about going over api limit.

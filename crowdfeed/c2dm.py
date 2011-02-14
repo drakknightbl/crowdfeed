@@ -46,7 +46,21 @@ class C2DMSender(object):
         else:
             print 'not sending because last time is : %s' % time_since_last.seconds
 
+    def send_to_alu(self, subscriber_id, caller_id):
+        print 'send to alu'
+        params = urllib.urlencode({'subscriber_id':subscriber_id, 'caller_id':caller_id})
+        try:
+            url = 'http://aluserver.dyndns.org:18194/alu/concierge/notify'
+                    
+            req = urllib2.Request(url, params)
+            threads.deferToThread(self._blocking_send_msg, req)
+        except Exception:
+            print 'fail alu_request silently'
+
     def _blocking_send_msg(self, req):
         response = urllib2.urlopen(req)
-        content = response.read()
-        print 'c2dm response : %s' % content
+        try:
+            content = response.read()
+            print 'c2dm response : %s' % content
+        except Exception:
+            print 'an error occured while dispatching push message' 

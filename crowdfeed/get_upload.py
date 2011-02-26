@@ -5,9 +5,12 @@ from twisted.internet import reactor
 from twisted.web2 import server, http, resource, channel
 from twisted.web2 import http_headers, responsecode
 from twisted.web2 import iweb
+import shutil
 
 
 SAVEDIR = "/tmp"
+MEDIA_INDEX = '/u/media/facedetect/index.txt'
+MEDIA_DIR = '/u/media/facedetect/'
 READSIZE=8192
 
 import state
@@ -44,8 +47,8 @@ class UploadFile(resource.PostableResource):
         c = request.args['caller_id'][0]
         print 'subscriber_id : %s' % p
 
-        dest = os.path.join(SAVEDIR, filename)
-        destfile = open(dest, 'wb')
+        tmp = os.path.join(SAVEDIR, filename)
+        destfile = open(tmp, 'wb')
         tot = 0
         while True:
             buf = file.read(READSIZE)
@@ -56,10 +59,35 @@ class UploadFile(resource.PostableResource):
         destfile.close()
         file.close()
 
-        msg = "saved %s to %s" % (filename, dest)
+        msg = "saved %s to %s" % (filename, tmp)
 
-        #_c2dm.send_msg('Jake is at your door. %s' % time.time())
         _c2dm.send_to_alu(p,c)
+
+
+        if not os.path.exists(MEDIA_DIR):
+            os.makedirs(MEDIA_DIR)
+
+        print 'opening : %s' % MEDIA_INDEX
+    
+        indexf = open(MEDIA_INDEX, 'r')
+        c = indexf.read()
+        if c:
+            try:
+                index = int(c) + 1
+            except ValueError:
+                index = 0
+        else:
+            index = 0
+
+        indexf.close()
+
+        indexf = open(MEDIA_INDEX, 'w')
+        dest = os.path.join(MEDIA_DIR, '%s.jpg' % index)
+        indexf.write('%s' % index)
+        indexf.close()
+        
+        shutil.copy(tmp, dest)
+
 
         print msg
         return http.Response(stream="%s" % msg)
@@ -80,4 +108,3 @@ if __name__ == "__main__":
     site = server.Site(Toplevel())
     reactor.listenTCP(1080, channel.HTTPFactory(site))
     reactor.run()
-

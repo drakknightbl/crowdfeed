@@ -68,18 +68,21 @@ class UploadFile(resource.PostableResource):
             os.makedirs(MEDIA_DIR)
 
         print 'opening : %s' % MEDIA_INDEX
-    
-        indexf = open(MEDIA_INDEX, 'r')
-        c = indexf.read()
-        if c:
-            try:
-                index = int(c) + 1
-            except ValueError:
-                index = 0
-        else:
-            index = 0
 
-        indexf.close()
+        if not os.path.exists(MEDIA_INDEX):
+            index = 0
+        else:
+            indexf = open(MEDIA_INDEX, 'r')
+            c = indexf.read()
+            if c:
+                try:
+                    index = int(c) + 1
+                except ValueError:
+                    index = 0
+            else:
+                index = 0
+
+            indexf.close()
 
         indexf = open(MEDIA_INDEX, 'w')
         dest = os.path.join(MEDIA_DIR, '%s.jpg' % index)

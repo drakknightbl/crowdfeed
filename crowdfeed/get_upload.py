@@ -45,6 +45,12 @@ class UploadFile(resource.PostableResource):
         file = request.files['filename'][0][2]
         p = request.args['subscriber_id'][0]
         c = request.args['caller_id'][0]
+
+        try:
+            native_dialer = request.args['native_dialer'][0]
+        except (IndexError,ValueError):
+            native_dialer = False
+
         print 'subscriber_id : %s' % p
 
         tmp = os.path.join(SAVEDIR, filename)
@@ -60,8 +66,9 @@ class UploadFile(resource.PostableResource):
         file.close()
 
         msg = "saved %s to %s" % (filename, tmp)
-
-        _c2dm.send_to_alu(p,c)
+        
+        if not native_dialer:
+            _c2dm.send_to_alu(p,c)
 
 
         if not os.path.exists(MEDIA_DIR):

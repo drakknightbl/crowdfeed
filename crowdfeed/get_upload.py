@@ -68,7 +68,10 @@ class UploadFile(resource.PostableResource):
         msg = "saved %s to %s" % (filename, tmp)
         
         if not native_dialer:
+            print 'sending notification'
             _c2dm.send_to_alu(p,c)
+        else:
+            print 'not sending notification'
 
 
         if not os.path.exists(MEDIA_DIR):

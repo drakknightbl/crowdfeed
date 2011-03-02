@@ -50,8 +50,9 @@ class C2DMSender(object):
         print 'send to alu'
         params = urllib.urlencode({'subscriber_id':subscriber_id, 'caller_id':caller_id})
         try:
-            url = 'http://aluserver.dyndns.org:18194/alu/concierge/notify'
-                    
+            url = 'http://alusrv.demo.alcatel-lucent.com/alu/concierge/notify'
+            #url = 'http://127.0.0.1:18194/alu/concierge/notify'
+                   
             req = urllib2.Request(url, params)
             threads.deferToThread(self._blocking_send_msg, req)
         except Exception:

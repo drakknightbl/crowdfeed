@@ -50,8 +50,8 @@ class C2DMSender(object):
         print 'send to alu'
         params = urllib.urlencode({'subscriber_id':subscriber_id, 'caller_id':caller_id})
         try:
-            #url = 'http://alusrv.demo.alcatel-lucent.com/alu/concierge/notify'
-            url = 'http://aluserver.dyndns.org:18194/alu/concierge/notify'
+            url = 'http://alumsrv.demo.alcatel-lucent.com:18194/alu/concierge/notify'
+            #url = 'http://aluserver.dyndns.org:18194/alu/concierge/notify'
 
             #url = 'http://127.0.0.1:18194/alu/concierge/notify'
                    

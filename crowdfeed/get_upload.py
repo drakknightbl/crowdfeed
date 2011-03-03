@@ -48,7 +48,7 @@ class UploadFile(resource.PostableResource):
 
         try:
             native_dialer = request.args['native_dialer'][0]
-        except (IndexError,ValueError):
+        except (KeyError, IndexError,ValueError):
             native_dialer = False
 
         print 'subscriber_id : %s' % p

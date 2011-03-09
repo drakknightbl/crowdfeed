@@ -10,6 +10,7 @@ It is also being used by the mwc, christmas party and video concierge demos.
 Requirements :
     * python
     * twisted 
+    * simplejson
 
 Using :
     ~:python get_crowdfeed.py
